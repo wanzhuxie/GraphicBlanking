@@ -118,8 +118,8 @@ class BlankingVerification:
 
         timePoint3=time.perf_counter()
         self.mathBox.SetRotation(self._RotateX,self._RotateY,self._RotateZ)
-        listHidenFace=self.mathBox.GetHideFaces()
-        #print(listHidenFace)
+        listHidenVertex, listHidenEdges, listHidenFaces=self.mathBox.GetHideFaces()
+        #print(listHidenFaces)
         timePoint4=time.perf_counter()
         print ("mathBox:", "%.2f" % ((timePoint4-timePoint3)*1000), "ms")
 
@@ -130,14 +130,35 @@ class BlankingVerification:
         #  GLUT_BITMAP_HELVETICA_12, and GLUT_BITMAP_HELVETICA_18.
         font_style = GLUT_BITMAP_TIMES_ROMAN_24
         glColor3f(0.0, 1.0, 0.0)
-        info="Current back faces: "
-        for i in range (len(listHidenFace)):
-            if i==0:
-                info += str(listHidenFace[i])
-            else:
-                info += "," + str(listHidenFace[i])
 
+        info =""
+        info+="Current back Vertexes: "
+        for i in range (len(listHidenVertex)):
+            if i==0:
+                info += str(listHidenVertex[i])
+            else:
+                info += "," + str(listHidenVertex[i])
         glRasterPos2i(-3, 2)
+        for i in info:
+            glutBitmapCharacter(font_style, ord(i))
+
+        info="Current back Edges: "
+        for i in range (len(listHidenEdges)):
+            if i==0:
+                info += str(listHidenEdges[i])
+            else:
+                info += "," + str(listHidenEdges[i])
+        glRasterPos2i(-3, 1)
+        for i in info:
+            glutBitmapCharacter(font_style, ord(i))
+
+        info="Current back Faces: "
+        for i in range (len(listHidenFaces)):
+            if i==0:
+                info += str(listHidenFaces[i])
+            else:
+                info += "," + str(listHidenFaces[i])
+        glRasterPos2i(-3, 0)
         for i in info:
             glutBitmapCharacter(font_style, ord(i))
 

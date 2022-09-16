@@ -68,7 +68,7 @@ def TrangleArea(mPoint1,mPoint2,mPoint3):
     return dArea
 
 #mine
-class FaceBlankingBox0:
+class FaceBlankingBox:
     def __init__(self,center=[0,0,0],sideLen=2):
         self.center=center
         self.sideLen=sideLen
@@ -81,6 +81,18 @@ class FaceBlankingBox0:
         self.listVertexInitialCoor=[[-1,1,1],[-1,-1,1],[1,-1,1],[1,1,1],[1,1,-1],[1,-1,-1],[-1,-1,-1],[-1,1,-1]]
         # 立方体每个面的顶点序号 前方面的点序号1234 后方面的点序号5678
         # 面的序号：前0后1左2右3上4下5
+        self.listEdgeVertex=[[0, 1], \
+                             [1, 2], \
+                             [2, 3], \
+                             [3, 0], \
+                             [4, 5], \
+                             [5, 6],\
+                             [6, 7],\
+                             [7, 4],\
+                             [0, 7],\
+                             [1, 6],\
+                             [2, 5],\
+                             [3, 4]]
         self.listFaceVertex=[[0, 1, 2, 3], \
                              [4, 5, 6, 7], \
                              [7, 6, 1, 0], \
@@ -130,6 +142,10 @@ class FaceBlankingBox0:
         self.UpdateVertexCoor()
 
         listHidenVertex = []# 被隐藏的点
+        listHidenEdges = []# 被隐藏的线
+        listHidenFaces = []# 被隐藏的面
+
+        #点
         for i in range(len(self.listVertexCoor)):#遍历每个顶点坐标
             for j in range (len(self.listFaceVertex)):#遍历每个面
                 if i in self.listFaceVertex[j]:
@@ -137,18 +153,24 @@ class FaceBlankingBox0:
                 if self.CheckLinePlaneIntersect(i,j):
                     listHidenVertex.append(i)
 
+        #线
+        listHidenEdges_Multi=[]
+        for item in listHidenVertex:
+            listHidenEdges_Multi.append(self.GetVertexNeighborEdges(item))
+        nplistHidenEdges_Multi=np.array(listHidenEdges_Multi)
+        nplistHidenEdges=nplistHidenEdges_Multi.reshape(1,-1)
+        listHidenEdges=np.unique(nplistHidenEdges[0])
 
-
-        #收集隐藏顶点对应的面，均是隐藏面
+        #面
         listHidenFaces_Multi=[]
         for item in listHidenVertex:
             listHidenFaces_Multi.append(self.GetVertexNeighborFaces(item))
-
         nplistHidenFaces_Multi=np.array(listHidenFaces_Multi)
         nplistHidenFaces=nplistHidenFaces_Multi.reshape(1,-1)
         listHidenFaces=np.unique(nplistHidenFaces[0])
+
         #print(listHidenFaces)
-        return listHidenFaces
+        return listHidenVertex , listHidenEdges , listHidenFaces
 
     #检查顶点是否被面所遮挡
     def CheckLinePlaneIntersect(self,iVertexIndex,iFaceIndex):
@@ -182,18 +204,25 @@ class FaceBlankingBox0:
             return True
         return False
 
-    #根据顶点Index获取相邻的3个面index
+    #根据顶点Index获取相邻的面index
     def GetVertexNeighborFaces(self, vertexIndex):
         listNeighborFaces=[]
         for eachFaceIndex in range (len(self.listFaceVertex)):
             if vertexIndex in self.listFaceVertex[eachFaceIndex]:
                 listNeighborFaces.append(eachFaceIndex)
         return listNeighborFaces
+    #根据顶点Index获取相邻的边线index
+    def GetVertexNeighborEdges(self, vertexIndex):
+        listNeighborEdges=[]
+        for eachEdgeIndex in range (len(self.listEdgeVertex)):
+            if vertexIndex in self.listEdgeVertex[eachEdgeIndex]:
+                listNeighborEdges.append(eachEdgeIndex)
+        return listNeighborEdges
 
 
 
 #Robert methed
-class FaceBlankingBox:
+class FaceBlankingBox0:
     def __init__(self,center=[0,0,0],sideLen=2):
         self.center=center
         self.sideLen=sideLen
