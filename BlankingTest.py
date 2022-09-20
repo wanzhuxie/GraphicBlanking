@@ -27,6 +27,7 @@ class BlankingVerification:
         self.height=640
         self.mathBox=FaceBlankingBox()
 
+        self.SideLen=8
         self.InitGL(self.width, self.height)
 
         #rotate around XYZ axes
@@ -61,7 +62,7 @@ class BlankingVerification:
         glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST)
         glLoadIdentity()
         #gluPerspective(45.0, float(width) / float(height), 0.1, 100.0)
-        glOrtho(-3,3,-3,3,-10,10)
+        glOrtho(-10,10,-10,10,-10,10)
         glMatrixMode(GL_MODELVIEW)
         glEnable(GL_DEPTH_TEST)
 
@@ -138,7 +139,7 @@ class BlankingVerification:
                 info += str(listHidenVertex[i])
             else:
                 info += "," + str(listHidenVertex[i])
-        glRasterPos2i(-3, 2)
+        glRasterPos2i(-10, 9)
         for i in info:
             glutBitmapCharacter(font_style, ord(i))
 
@@ -148,7 +149,7 @@ class BlankingVerification:
                 info += str(listHidenEdges[i])
             else:
                 info += "," + str(listHidenEdges[i])
-        glRasterPos2i(-3, 1)
+        glRasterPos2i(-10, 8)
         for i in info:
             glutBitmapCharacter(font_style, ord(i))
 
@@ -158,7 +159,7 @@ class BlankingVerification:
                 info += str(listHidenFaces[i])
             else:
                 info += "," + str(listHidenFaces[i])
-        glRasterPos2i(-3, 0)
+        glRasterPos2i(-10, 7)
         for i in info:
             glutBitmapCharacter(font_style, ord(i))
 
@@ -178,60 +179,63 @@ class BlankingVerification:
 
     #绘制立方体
     def DrawBox(self):
+        #正方体半边长
+        L=self.SideLen/2
         #纹理的四个顶点的坐标分别是(0.0f, 1.0f)、(0.0f, 0.0f)、(1.0f, 0.0f)、(1.0f, 1.0f)，分别对应左上、左下、右下、右上
         #face1
         glBindTexture(GL_TEXTURE_2D, 0)
         glBegin(GL_QUADS)
-        glTexCoord2f(0.0, 1.0);        glVertex3f(-1,1,1)
-        glTexCoord2f(0.0, 0.0);        glVertex3f(-1,-1,1)
-        glTexCoord2f(1.0, 0.0);        glVertex3f(1,-1,1)
-        glTexCoord2f(1.0, 1.0);        glVertex3f(1,1,1)
+        glTexCoord2f(0.0, 1.0);        glVertex3f(-L,L,L)
+        glTexCoord2f(0.0, 0.0);        glVertex3f(-L,-L,L)
+        glTexCoord2f(1.0, 0.0);        glVertex3f(L,-L,L)
+        glTexCoord2f(1.0, 1.0);        glVertex3f(L,L,L)
         glEnd()
 
         #face2
         glBindTexture(GL_TEXTURE_2D, 1)
         glBegin(GL_QUADS)
-        glTexCoord2f(0.0, 1.0);        glVertex3f(1,1,-1)
-        glTexCoord2f(0.0, 0.0);        glVertex3f(1,-1,-1)
-        glTexCoord2f(1.0, 0.0);        glVertex3f(-1,-1,-1)
-        glTexCoord2f(1.0, 1.0);        glVertex3f(-1,1,-1)
+        glTexCoord2f(0.0, 1.0);        glVertex3f(L,L,-L)
+        glTexCoord2f(0.0, 0.0);        glVertex3f(L,-L,-L)
+        glTexCoord2f(1.0, 0.0);        glVertex3f(-L,-L,-L)
+        glTexCoord2f(1.0, 1.0);        glVertex3f(-L,L,-L)
         glEnd()
 
         #face3
         glBindTexture(GL_TEXTURE_2D, 2)
         glBegin(GL_QUADS)
-        glTexCoord2f(0.0, 1.0);        glVertex3f(-1,1,-1)
-        glTexCoord2f(0.0, 0.0);        glVertex3f(-1,-1,-1)
-        glTexCoord2f(1.0, 0.0);        glVertex3f(-1,-1,1)
-        glTexCoord2f(1.0, 1.0);        glVertex3f(-1,1,1)
+        glTexCoord2f(0.0, 1.0);        glVertex3f(-L,L,-L)
+        glTexCoord2f(0.0, 0.0);        glVertex3f(-L,-L,-L)
+        glTexCoord2f(1.0, 0.0);        glVertex3f(-L,-L,L)
+        glTexCoord2f(1.0, 1.0);        glVertex3f(-L,L,L)
         glEnd()
 
         #face4
         glBindTexture(GL_TEXTURE_2D, 3)
         glBegin(GL_QUADS)
-        glTexCoord2f(0.0, 1.0);        glVertex3f(1,1,1)
-        glTexCoord2f(0.0, 0.0);        glVertex3f(1,-1,1)
-        glTexCoord2f(1.0, 0.0);        glVertex3f(1,-1,-1)
-        glTexCoord2f(1.0, 1.0);        glVertex3f(1,1,-1)
+        glTexCoord2f(0.0, 1.0);        glVertex3f(L,L,L)
+        glTexCoord2f(0.0, 0.0);        glVertex3f(L,-L,L)
+        glTexCoord2f(1.0, 0.0);        glVertex3f(L,-L,-L)
+        glTexCoord2f(1.0, 1.0);        glVertex3f(L,L,-L)
         glEnd()
 
         #face5
         glBindTexture(GL_TEXTURE_2D, 4)
         glBegin(GL_QUADS)
-        glTexCoord2f(0.0, 1.0);        glVertex3f(-1,1,-1)
-        glTexCoord2f(0.0, 0.0);        glVertex3f(-1,1,1)
-        glTexCoord2f(1.0, 0.0);        glVertex3f(1,1,1)
-        glTexCoord2f(1.0, 1.0);        glVertex3f(1,1,-1)
+        glTexCoord2f(0.0, 1.0);        glVertex3f(-L,L,-L)
+        glTexCoord2f(0.0, 0.0);        glVertex3f(-L,L,L)
+        glTexCoord2f(1.0, 0.0);        glVertex3f(L,L,L)
+        glTexCoord2f(1.0, 1.0);        glVertex3f(L,L,-L)
         glEnd()
 
         #face6
         glBindTexture(GL_TEXTURE_2D, 5)
         glBegin(GL_QUADS)
-        glTexCoord2f(0.0, 1.0);        glVertex3f(-1,-1,1)
-        glTexCoord2f(0.0, 0.0);        glVertex3f(-1,-1,-1)
-        glTexCoord2f(1.0, 0.0);        glVertex3f(1,-1,-1)
-        glTexCoord2f(1.0, 1.0);        glVertex3f(1,-1,1)
+        glTexCoord2f(0.0, 1.0);        glVertex3f(-L,-L,L)
+        glTexCoord2f(0.0, 0.0);        glVertex3f(-L,-L,-L)
+        glTexCoord2f(1.0, 0.0);        glVertex3f(L,-L,-L)
+        glTexCoord2f(1.0, 1.0);        glVertex3f(L,-L,L)
         glEnd()
+
 
     #MainLoop
     def MainLoop(self):
