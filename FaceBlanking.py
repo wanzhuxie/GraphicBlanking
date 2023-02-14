@@ -14,14 +14,8 @@ opengl X轴水平向右，Y竖直向上，Z垂直屏幕向外
 '''
 # -------------------------------------------
 
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from OpenGL.GLUT import *
 import numpy as np
 import copy
-import cv2
-import time
-import Geometry3D as g3d
 
 def TwoPointDistance(mPoint1 , mPoint2):
     dist = np.sqrt(np.sum(np.square(np.array(mPoint1) - np.array(mPoint2))))

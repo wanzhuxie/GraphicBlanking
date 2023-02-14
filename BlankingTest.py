@@ -18,7 +18,6 @@ import numpy as np
 import copy
 import cv2
 import time
-import Geometry3D as g3d
 
 
 class BlankingVerification:
@@ -40,7 +39,7 @@ class BlankingVerification:
         glutInit()
         glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
         glutInitWindowSize(width, height)
-        self.window = glutCreateWindow("ARVS")
+        self.window = glutCreateWindow("Back Elements Blanking")
         glutDisplayFunc(self.Draw)
         glutIdleFunc(self.Draw)
 
